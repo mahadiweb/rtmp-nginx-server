@@ -13,9 +13,13 @@
     rtmp {
         server {
             listen 1935;
+	    chunk_size 4096;
     
             application live {
                 live on;
+		record off;
+		# Edit and enable line below to push incoming stream to YouTube
+		# push rtmp://x.rtmp.youtube.com/live2/<your-Stream-Key-Copied-From-YouTube>;
             }
             
             application hls {
