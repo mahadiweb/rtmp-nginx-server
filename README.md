@@ -14,6 +14,8 @@
         server {
             listen 1935;
 	    chunk_size 4096;
+	    allow publish 127.0.0.1;
+	    deny publish all;
     
             application live {
                 live on;
@@ -37,6 +39,7 @@
             
             location / {
                 root html;
+		add_header Access-Control-Allow-Orgin *;
             }
     
             #for set header start
@@ -81,8 +84,15 @@
         }
     }
     
-
 url stracture :http://127.0.0.1/hls/stream.m3u8?auth=token&expires=time
+
+- **listen 1935** means that RTMP will be listening for connections on port 1935, which is standard.
+- **chunk_size 4096** means that RTMP will be sending data in 4KB blocks, which is also standard.
+- **allow publish 127.0.0.1** and **deny publish all** mean that the server will only allow video to be published from the same server, to avoid any other users pushing their own streams.
+- **application live** defines an application block that will be available at the /live URL path.
+- **live on** enables live mode so that multiple users can connect to your stream concurrently, a baseline assumption of video streaming.
+- **record off** disables Nginx-RTMP’s recording functionality, so that all streams are not separately saved to disk by default.
+- **push** means push incoming stream to other platform.
 
 generate auth hash in php
 
